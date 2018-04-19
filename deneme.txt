@@ -1,0 +1,412 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+//fonksiyon prototipleri...
+void siralama(int[],int); //kabarcik siralama fonksiyonu..(kucukten buyuge)...
+void siralama2(int[],int[],int); //buyukten kucuge siralama fonksiyonu (2 fonksiyon siraliyor)...
+int karsilastirma(int[],int[]); //arama fonksiyonu.. 2 dizide ayni sayi olup olmadiginin kontrolu icin...
+
+
+int main()
+{
+    unsigned cekirdek;
+    int odul=0,toplam_odul=0;
+    int odul1=0,odul2=0,odul3=0,odul4=0,odul_puani2=0,odul_puani3=0,odul_puani4=0;
+    int secim;
+    int i,j;
+    int sayac=0,sayac2=0,sayac3=0;
+    int hatali1,hatali2,bilinen;
+    int dahaoncevar;
+    char cikis='h',cevap='e',devam;
+    int kullanicinin_tuttugu[5]={0}; //kullanicinin girecegi 6 sayi icin...
+    int kullanicinin_tuttugu2[5]={0}; //bu da kullanicinin girdigi 6 sayi, istatistik 4 icin yapildi. ilkinin baslangictaki kopyasi...
+    int kullanicinin_tuttuklari[53]={0}; //kullanicinin sayilari kacar kez tuttugunu tutan dizi...
+    int bilgisayarin_tuttugu[5]={0}; //bilgisayarin rastgele tuttugu sayilari tutan dizi...
+    int sayilar[53]={0}; //[1-54] araligindaki sayilari listelemek icin...
+    int enazbirkez[53]={0}; //2. istatistikte kullaniliyor, en az bir kez cikan sayilari tutuyor...
+    int hangisayi[53]={0}; //2. istatistikte kullaniliyor, en az bir kez cikan sayilarin kacar kez ciktiklarini tutuyor...
+    int en_cok_tercih_edilenler[53]={0}; //kullanicinin en cok tercih ettigi sayilari tutuyor (sayilarin tercih edilme sayilari)...
+    int oynanma_sayisi[53]={0};
+
+
+
+    printf("Lutfen rastgele sayi ureticisi icin cekirdek degerini giriniz:\n");
+    scanf("%u",&cekirdek);
+    srand(cekirdek);
+
+    do{//ana menunun yazdirilmasi...
+        printf("ANA MENU:\n\n");
+        printf("1) Super Loto (6/54) Oynama\n");
+        printf("2) Istatistikleri Goruntuleme\n");
+        printf("3) Cikis\n\n");
+
+        do{
+            printf("(Toplam odulunuz %d puan) Seciminizi giriniz:\n",toplam_odul);
+            scanf("%d",&secim);
+        }while(secim<1 || secim>3);
+
+        switch(secim){
+            //secilen islemin yerine getirilmesi...
+            case 1:
+            do{
+                do{
+                    odul=0;
+                    hatali1=0;
+                    hatali2=1;
+                    sayac=0;
+
+                    for(i=0;i<=5;i++){
+                        printf("%d. sayiyi giriniz [1-54 araliginda 6 farkli sayi girilecek]:\n",i+1);
+                        scanf("%d",&kullanicinin_tuttugu[i]);
+                        if(kullanicinin_tuttugu[i]<1 || kullanicinin_tuttugu[i]>54){
+                            printf("Aralik disi giris yaptiniz!\n\n"); //aralik disindaki girisler icin hata mesaji veriliyor...
+                            hatali1=1;
+                       }
+                        if (sayac!=0){
+                            for(j=0;j<=sayac-1;j++){
+                               if (kullanicinin_tuttugu[i]==kullanicinin_tuttugu[j]){
+                                    printf("Hatali giris! Lutfen birbirinden farkli sayilar giriniz.\n\n"); //birbirinin ayni sayilar girilirse hata mesaji veriliyor...
+                                    hatali1=1;
+                                }
+                            }
+                        }
+
+                        if(hatali1==1){
+                            hatali2=0;
+                            break;
+                        }
+
+                        sayac++;
+                        kullanicinin_tuttugu2[i]=kullanicinin_tuttugu[i]; //4. istatistikte kullanilmak üzere kullanicinin tahminlerini (6 sayi) iceren dizinin kopyasi...
+                        kullanicinin_tuttuklari[kullanicinin_tuttugu2[i]]=kullanicinin_tuttuklari[kullanicinin_tuttugu2[i]]+1; //kullanicinin tahminlerinin (6'sardan tum tahminler) dizide saklanmasi...
+                    }
+
+               }while(hatali2==0); //hatali giris varsa sayilar bastan istenecek...
+
+
+               for(j=0;j<=5;j++){
+                   do{
+                       dahaoncevar=0; //bilgisayarin tuttugu sayilarin ayni olmamasi kontrolu icin...
+                       bilgisayarin_tuttugu[j]=(rand()%54)+1; //bilgisayar rastgele bir sayi tutuyor...
+
+                       if (j!=0){
+                          for(i=0;i<=j-1;i++){
+                             if (bilgisayarin_tuttugu[j]==bilgisayarin_tuttugu[i]){
+                                 dahaoncevar=1;
+                                 break;
+                             }
+                          }
+                       }
+                    }while (dahaoncevar==1); //bilgisayar ayni sayilari tutmussa bastan yeni sayilar tutturuluyor...
+
+                    sayilar[bilgisayarin_tuttugu[j]-1]=sayilar[bilgisayarin_tuttugu[j]-1]+1;
+               }
+
+
+               siralama(bilgisayarin_tuttugu,5); //bilgisayarin tuttugu sayilarin kucukten buyuge siralanmasi...
+               siralama(kullanicinin_tuttugu,5); //kullanicinin tahminlerinin kucukten buyuge siralanmasi...
+               printf("BILGISAYARIN TUTTUGU\tKULLANICININ TUTTUGU\n");
+
+               for(j=0;j<=5;j++){
+                   printf("%10d\t\t%10d\n",bilgisayarin_tuttugu[j],kullanicinin_tuttugu[j]);
+               }
+
+               bilinen=karsilastirma(bilgisayarin_tuttugu,kullanicinin_tuttugu); //kullanicinin tahminleriyle bilgisayarin tuttuklari karsilastiriliyor...
+               printf("%d sayi bildiniz.\n",bilinen);                            //ayni olanlar bulunuyor...
+
+               switch(bilinen){ //kullanicinin dogru bildigi sayilar icin verilecek odul puanlari...
+                   case 3:
+                      odul=1;
+                      odul1++;
+                   break;
+
+                   case 4:
+                      odul=3;
+                      odul2++;
+                      odul_puani2=odul2*3;
+                   break;
+
+                   case 5:
+                      odul=10;
+                      odul3++;
+                      odul_puani3=odul3*10;
+                   break;
+
+                   case 6:
+                      odul=50;
+                      odul4++;
+                      odul_puani4=odul4*50;
+                   break;
+               }
+
+               toplam_odul=toplam_odul+odul; //kullanicinin tum oynadigi oyunlarda kazandigi toplam oduller...
+
+               if(odul==0){
+                  printf("Odul kazanamadiniz.\n");
+               }
+               else{
+                   printf("Bu oyunda %d puan odul kazandiniz.\n",odul);
+               }
+               printf("Toplam odulunuz %d puan.\n",toplam_odul);
+               printf("Tekrar oynamak istiyor musunuz? (e/E/h/H)\n");
+               fflush(stdin);
+               scanf("%c",&cevap);
+            }while(cevap=='e' || cevap=='E'); //kullanici tekrar oynamak istiyorsa oyuna geri donuluyor...
+            break;
+
+            case 2:
+               do{ //istatistik alt menusunun yazdirilimasi...
+                  printf("ISTATISTIK ALT MENUSU:\n\n");
+                  printf("1) Cekilislerde cikan sayilarin, kac kez ciktiklarinin listelenmesi\n");
+                  printf("2) Cekilislerde en az 1 kez cikan sayilarin, kac kez ciktiklarina gore sirali olarak listelenmesi\n");
+                  printf("3) Oyuncunun hangi odulleri kacar kez kazandiginin listelenmesi\n");
+                  printf("4) Oyuncunun en cok tercih ettigi 3 sayinin listelenmesi\n");
+                  printf("5) Ana Menu\n\n");
+
+                  do{
+                      printf("Seciminizi giriniz:\n");
+                      scanf("%d",&secim);
+                  }while(secim<1 || secim>5);
+
+                  switch(secim){
+                      //secilen islemin yerine getirilmesi...
+                      case 1:
+                         printf("Sayi Kac Kez Cubuk Grafik\n");
+                         printf("---- ------- ------------\n");
+
+
+                         for(i=0;i<=8;i++){ //tablonun duzenli olmasi icin, -tek basamakli sayilar icin- satiri yazdirirken fazladam bir bosluk birakildi...
+                             printf("  %d     %d    ",i+1,sayilar[i]);
+                              for (j=1;j<=sayilar[i];j++)
+                                   printf("*");
+                              printf("\n");
+                         }
+
+                         for(i=9;i<=22;i++){
+                             printf(" %d     %d    ",i+1,sayilar[i]);
+                              for (j=1;j<=sayilar[i];j++)
+                                   printf("*");
+                              printf("\n");
+
+                         }
+                         printf("Listenin devami icin bir tusa basiniz..."); //satir sayisi 24 oldugu dusunulerek tablonun devami icin bir klavye girisi isteniyor...
+                         fflush(stdin);
+                         scanf("%c",&devam);
+                         for(i=23;i<=45;i++){ //tablonun devami...
+                             printf(" %d     %d    ",i+1,sayilar[i]);
+                              for (j=1;j<=sayilar[i];j++)
+                                   printf("*");
+                              printf("\n");
+
+                         }
+                         printf("Listenin devami icin bir tusa basiniz...\n"); //satir sayisi 24 oldugu dusunulerek tablonun devami icin bir klavye girisi isteniyor...
+                         fflush(stdin);
+                         scanf("%c",&devam);
+                         for(i=46;i<=53;i++){ //tablonun devami...
+                             printf(" %d     %d    ",i+1,sayilar[i]);
+                              for (j=1;j<=sayilar[i];j++)
+                                   printf("*");
+                              printf("\n");
+
+                         }
+                      break;
+
+
+
+                      case 2:
+                         sayac2=0;
+                         for(i=0;i<=53;i++){
+                             if (sayilar[i]>0){
+                                 enazbirkez[sayac2]=sayilar[i]; //cekilislerde en az bir kez cikan sayilar bir dizide tutuluyor...
+                                 hangisayi[sayac2]=i+1; //en az bir kez cikan sayilarin kacar kez ciktigini listeleyebilmek icin...
+                                 sayac2++;
+                             }
+                         }
+
+                         siralama2(enazbirkez,hangisayi,sayac2-1); //2 diziyi buyukten kucuge siralama. ve yerlerinin degismesi.
+
+                         printf("Sayi Kac Kez Cubuk Grafik\n");
+                         printf("---- ------- ------------\n");
+
+                         if((sayac-1)<24){
+                             for(i=0;i<sayac2;i++){
+                                 if(hangisayi[i]>9) //tablonun duzenli gorunmesi icin. (tek basamakli degilse bir bosluk az.)
+                                    printf(" %d     %d    ",hangisayi[i],enazbirkez[i]);
+                                 else
+                                    printf("  %d     %d    ",hangisayi[i],enazbirkez[i]);
+                                 for (j=1;j<=enazbirkez[i];j++)
+                                    printf("*");
+                                 printf("\n");}
+                         }
+
+                         if((sayac-1)>23 && (sayac-1)<46){
+                             for(i=0;i<=22;i++){
+                                 if(hangisayi[i]>9)
+                                    printf(" %d     %d    ",hangisayi[i],enazbirkez[i]);
+                                 else
+                                    printf("  %d     %d    ",hangisayi[i],enazbirkez[i]);
+                                 for (j=1;j<=enazbirkez[i];j++)
+                                    printf("*");
+                                 printf("\n");}
+
+                                 printf("Listenin devami icin bir tusa basiniz...\n"); //satir sayisi 24 oldugu dusunulerek tablonun devami icin bir klavye girisi isteniyor...
+                                 fflush(stdin);
+                                 scanf("%c",&devam);
+
+                                 for(i=23;i<sayac;i++){ //tablonun devami...
+                                     if(hangisayi[i]>9)
+                                        printf(" %d     %d    ",hangisayi[i],enazbirkez[i]);
+                                     else
+                                        printf("  %d     %d    ",hangisayi[i],enazbirkez[i]);
+                                     for (j=1;j<=enazbirkez[i];j++)
+                                        printf("*");
+                                     printf("\n");
+                                 }
+                         }
+
+                         if((sayac-1)>45){
+                             for(i=0;i<=22;i++){
+                                 if(hangisayi[i]>9)
+                                    printf(" %d     %d    ",hangisayi[i],enazbirkez[i]);
+                                 else
+                                    printf("  %d     %d    ",hangisayi[i],enazbirkez[i]);
+                                 for (j=1;j<=enazbirkez[i];j++)
+                                    printf("*");
+                                 printf("\n");
+                             }
+                             printf("Listenin devami icin bir tusa basiniz...\n"); //satir sayisi 24 oldugu dusunulerek tablonun devami icin bir klavye girisi isteniyor...
+                             fflush(stdin);
+                             scanf("%c",&devam);
+
+                             for(i=23;i<=45;i++){ //tablonun devami...
+                                 if(hangisayi[i]>9)
+                                    printf(" %d     %d    ",hangisayi[i],enazbirkez[i]);
+                                 else
+                                    printf("  %d     %d    ",hangisayi[i],enazbirkez[i]);
+                                 for (j=1;j<=enazbirkez[i];j++)
+                                    printf("*");
+                                 printf("\n");
+                             }
+
+                             printf("Listenin devami icin bir tusa basiniz...\n"); //satir sayisi 24 oldugu dusunulerek tablonun devami icin bir klavye girisi isteniyor...
+                             fflush(stdin);
+                             scanf("%c",&devam);
+
+                             for(i=46;i<sayac;i++){ //tablonun devami...
+                                 if(hangisayi[i]>9)
+                                    printf(" %d     %d    ",hangisayi[i],enazbirkez[i]);
+                                 else
+                                    printf("  %d     %d    ",hangisayi[i],enazbirkez[i]);
+                                 for (j=1;j<=enazbirkez[i];j++)
+                                    printf("*");
+                                 printf("\n");
+                             }
+                         }
+
+                      break;
+
+
+                      case 3:
+                             printf("Dogru Tahmin Sayisi    Kac Kez   Kazandigi Odul Puani\n");
+                             printf("-------------------    -------   --------------------\n");
+                             printf("\t3%19d%16d\n",odul1,odul1);
+                             printf("\t4%19d%16d\n",odul2,odul_puani2);
+                             printf("\t5%19d%16d\n",odul3,odul_puani3);
+                             printf("\t6%19d%16d\n",odul4,odul_puani4);
+                      break;
+
+
+
+                      case 4:
+                         sayac3=0;
+                         for(i=0;i<53;i++){
+                             if (kullanicinin_tuttuklari[i]>0){
+                                 en_cok_tercih_edilenler[sayac3]=kullanicinin_tuttuklari[i]; //en cok tercih edilen 3 sayiyi bulmak icin bu diziye kullanicinin tuttugu degerler ataniyor.
+                                 oynanma_sayisi[sayac3]=i+1;
+                                 sayac3++;
+                             }
+                         }
+
+                         siralama2(en_cok_tercih_edilenler,oynanma_sayisi,sayac3); //buyukten kucuge siralama, yer degisimi.
+
+                         printf("Sayi Oynanma Sayisi\n");
+                         printf("---- --------------\n");
+                         for(i=0;i<=2;i++){
+                             if(oynanma_sayisi[i]>9)
+                                printf(" %d     %d    \n",oynanma_sayisi[i]-1,en_cok_tercih_edilenler[i]); //siralama2 fonksiyonu, ayni zamanda parametrelerin yerlerini degistiriyor, cunku daha onceki bir kullanimda
+                             else                                                                          //oyle yapmasi gerekiyordu, bunun icin yeniden bir fonksiyon yazma geregi duymadim.
+                                printf("  %d     %d    \n",oynanma_sayisi[i]-1,en_cok_tercih_edilenler[i]);//yerleri burada degisik gorunse de ayni islevi goruyor.
+                         }
+
+
+                      break;
+
+
+
+                      case 5: //ana menuye donuyor...
+                      break;
+                  }
+               }while(secim!=5);
+            break;
+
+            case 3:
+                printf("Cikmak istediginizden emin misiniz? (e/E/h/H)\n");
+                fflush(stdin);
+                scanf("%c",&cikis);
+            break;
+        }
+
+    }while(cikis == 'H' || cikis == 'h');
+
+    return 0;
+}
+
+
+//fonksiyonlarin islevleri prototiplerinin yaninda aciklandi.
+
+void siralama(int siralanacak[], int boyut)
+{
+    int i,j,gecici;
+    for(i=0;i<=boyut;i++){
+        for(j=0;j<=boyut-1;j++){
+            if(siralanacak[j]>siralanacak[j+1]){ //ustteki sayi alttakinden buyukse yerleri degistiriliyor...
+               gecici=siralanacak[j]; //yer degistirme...
+               siralanacak[j]=siralanacak[j+1];
+               siralanacak[j+1]=gecici;
+            }
+        }
+    }
+
+}
+
+void siralama2(int siralanacak[],int siralanacakolan[], int boyut)
+{
+    int i,j,gecici,gecici2;
+    for(i=0;i<=boyut-1;i++){
+        for(j=i+1;j<=boyut;j++){
+            if(siralanacak[j]>siralanacak[i]){
+               gecici=siralanacak[i]; //yer degistirme...
+               siralanacak[i]=siralanacak[j];
+               siralanacak[j]=gecici;
+               gecici2=siralanacakolan[i]; //yer degistirme...
+               siralanacakolan[i]=siralanacakolan[j];
+               siralanacakolan[j]=gecici2;
+            }
+        }
+    }
+
+}
+
+
+int karsilastirma(int bilgisayar[],int kullanici[])
+{
+    int i,j,tutan=0;
+    for(i=0;i<=5;i++){
+        for(j=0;j<=5;j++){
+            if(kullanici[i]==bilgisayar[j])
+            tutan++;
+        }
+    }
+
+    return tutan;
+}
