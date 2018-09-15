@@ -1,0 +1,19 @@
+# depslib dependency file v1.0
+1337379617 source:c:\users\dell\desktop\proje3\main.cpp
+	<iostream>
+	"ucuslar.cpp"
+	"kuyruk.cpp"
+
+1337378392 c:\users\dell\desktop\proje3\ucuslar.cpp
+	<iostream>
+	"ucuslar.h"
+
+1337378377 c:\users\dell\desktop\proje3\ucuslar.h
+
+1337380042 c:\users\dell\desktop\proje3\kuyruk.cpp
+	<iostream>
+	"ucuslar.h"
+	"kuyruk.h"
+
+1337369093 c:\users\dell\desktop\proje3\kuyruk.h
+
