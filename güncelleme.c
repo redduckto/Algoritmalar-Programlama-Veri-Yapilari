@@ -4,7 +4,7 @@
 struct ucus
 {
     int ucus_numarasi;
-    char kalkis_yeri[21];
+    
     char varis_yeri[21];
     int kalkis_saat;
     int kalkis_dk;
