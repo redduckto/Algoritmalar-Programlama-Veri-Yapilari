@@ -25,7 +25,7 @@ int main()
     int secenek;
 
 	do {
-        secenek=menu_secim();
+        secenek=menu_secim(); 
         switch(secenek) {
             case 1:
                 printf("Adayin numarasini giriniz:");

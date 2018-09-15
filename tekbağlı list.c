@@ -30,7 +30,7 @@ int main()
                 scanf("%d",&bir_aday->no);
                 printf("Adayin adini soyadini giriniz:");
                 fflush(stdin);
-                gets(bir_aday->ad_soyad);
+                gets(bir_aday->ad_soyad); 
                 printf("Adayin boyunu giriniz:");
                 scanf("%d",&bir_aday->boy);
                 sirali_ekle(&ilk,bir_aday);//aday, bekleme salonundaki kuyruga boy sirasina gore ekleniyor

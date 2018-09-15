@@ -21,7 +21,7 @@ void kalkis_zamani_degistir(FILE *);
 void bilet_satis(FILE *);
 int main()
 {
-    int secim;
+    int secim; 
     FILE *dosya1;
     FILE *dosya2;
     if((dosya1=fopen("ucus.dat","rb+"))==NULL)

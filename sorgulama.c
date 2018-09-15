@@ -26,7 +26,7 @@ int main()
 {
 
     int secim;
-    FILE *dosya1;
+    FILE *dosya1; 
     int bilet_say=0;
     int toplam_biet_fiyat=0;
     if((dosya1=fopen("ucus.dat","rb+"))==NULL)

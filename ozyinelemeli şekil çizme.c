@@ -25,7 +25,7 @@ int main()
             printf("7. Eskenar Dortgen (Baklava Dilimi) Cizme\n");
             printf("8. Paralel Kenar Cizme\n");
             printf("9. Cizim Karakterini Degistirme\n");
-            printf("10. Cikis\n");
+            printf("10. Cikis\n"); 
             do{
                 printf("\nSeciminizi Giriniz:");
                 scanf("%d",&secim);

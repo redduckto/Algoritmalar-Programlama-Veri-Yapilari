@@ -26,7 +26,7 @@ int main()
 
     return 0;
 }
-
+ 
 void push(int *yigin, int *tepe, int yeni)
 {
     //hem donusturme hem hesaplamada ayni push fonksiyonu (tamsayi ekleyen) kullaniliyor
